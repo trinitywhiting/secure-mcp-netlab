@@ -1,0 +1,10 @@
+# Python cache files (auto-generated, not source code)
+__pycache__/
+*.pyc
+
+# Secrets: API keys and passwords go in .env and must never be committed
+.env
+
+# Log files: the audit log we'll build may contain sensitive data
+*.log
+logs/
