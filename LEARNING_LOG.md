@@ -26,5 +26,7 @@
 
 \-An interesting point: When testing that the tool functioned properly, I noticed the app didn't request permission to run the tool. It executed without permission. I checked the app's connectors and navigated to my MCP server, which showed that tool permissions are set to "needs approval;" however, that particular chat was also in Claude's Auto mode, which uses a classifier that denies requests that are irreversible, destructive, or aimed outside my environment (https://code.claude.com/docs/en/auto-mode-config). Following further Anthropic documentation,  I found that using the permissions.ask mechanism can force a human-in-the loop interaction (https://code.claude.com/docs/en/auto-mode-config).
 
+\-After creating the unsafe ping tool, I checked for command injection by passing in my IP and "\& whoami" (using shell=True vulnerability). Both sides of the command ran, demonstrating how the command line simply follows syntax. This matters because Claude chooses the host value, which is sometimes read from text, so injected text could run commands on my machine.
+
 &#x20;
 
