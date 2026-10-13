@@ -11,11 +11,22 @@ def dns_lookup(hostname: str) -> str:
     return f"{hostname} resolves to {ip}"
 
 @mcp.tool()
-def ping_host_unsafe(host: str) -> str:
+def ping_host_unsafe(host: str) -> str: #Python hands the string to the shell
     """Ping a host to check if it is reachable (insecure version)"""
     command = "ping -n 1 " + host #the glued host string is the vulnerability
     #using shell=True within the subprocess module exposes the application to OS Command Injection vulnerabilities
     result = subprocess.run(command, shell=True, capture_output=True, text=True) #capture the output as text
+    return result.stdout
+
+@mcp.tool()
+def ping_host(host:str) -> str: #python runs the ping program directly; no shell/ no injection opportunity
+    """Ping a host to check if it is reachable"""
+    if not host or not all(c.isalnum() or c in ".-" for c in host): #if the host is empty or if any char is not a letter, digit, dot, or hyphen, then reject it (allowlist)
+        return f"Rejected: '{host}' is not a valid hostname."
+    result = subprocess.run(
+        ["ping", "-n", "1", host], #list method prevents injection
+        capture_output=True, text=True
+    )
     return result.stdout
 
 if __name__ == "__main__":
