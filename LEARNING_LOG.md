@@ -8,17 +8,24 @@
 
 \*\*Goal:\*\*
 
-* Understand how AI clients accessing MCP servers can be vulnerable to command injection.
+* Understand how AI clients accessing MCP servers can be vulnerable to command injection and prompt injection.
 
 
 
 \*\*What I did:\*\*
 
-* Created an MCP server (netlab) and used the Claude Desktop App as the client for connection. The server included networking ping and DNS tools. The client was used in the Claude Code tab, with permissions for tools set to "needs approval" and "auto" mode within the chat. Local MCP server logs were viewed to show successful initialization of the server and tool access, and the DNS tool was tested directly in the client. Both unsafe and safe versions of the ping tool were created to conduct isolated tests of command injection.  
+* Command injection: Created an MCP server (netlab) and used the Claude Desktop App as the client for connection. The server included networking ping and DNS tools. The client was used in the Claude Code tab, with permissions for tools set to "needs approval" and "auto" mode within the chat. Local MCP server logs were viewed to show successful initialization of the server and tool access, and the DNS tool was tested directly in the client. Both unsafe and safe versions of the ping tool were created to conduct isolated tests of command injection.
+
+  * The tool tests went as expected, with the unsafe version following injected instructions directly and the safe version preventing injection with validation checks.
+* Tool poisoning: Created an MCP server (FileHelper) with the same settings from the netlab sever, with the exception of "auto" mode. Manual mode was used after connecting the client to the server and viewing the logs. The client was tested to see if it would follow malicious instructions from the tool's description using three payload variations:
+1. Inserting the <IMPORTANT> tag into the tool's description; result: the client resisted, flagged it, and pointed it out to the user as prompt injection 
+2. Removing the tag and injecting tool description directly; result: the client resisted, flagged it, and pointed it out to the user
+3. Manipulating the output
+* The <IMPORTANT> tag failed to manipulate the client due to Claude's defenses; removing the tag also failed to manipulate the client.
 
 
 
-\*\*What I learned:\*\*
+\*\*What I learned - Command Injection:\*\*
 
 * A separate environment is necessary to remain organized and prevent projects from potentially breaking due to relying on specific dependencies.
 
@@ -41,6 +48,13 @@
 
 
 * Removing shell=true and using a list means a bad input cannot trigger a second command, and the validation check returns a rejection message.
+
+
+
+\*\*What I learned - Prompt Injection:\*\*
+
+* The AI Client uses the docstring description of the tool to determine when and how to use it. Attackers use tags such as <IMPORTANT>, <CRITICAL>, <URGENT>, etc. to draw focus. My testing with the used client shows that the tags made no difference.
+* The defenses against prompt injection within a malicious server rely mostly on the client and the user.
 
 &#x20;
 
