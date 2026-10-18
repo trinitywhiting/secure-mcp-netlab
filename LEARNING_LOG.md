@@ -21,7 +21,6 @@
 1. Inserting the <IMPORTANT> tag into the tool's description; result: the client resisted, flagged it, and pointed it out to the user as prompt injection 
 2. Removing the tag and injecting tool description directly; result: the client resisted, flagged it, and pointed it out to the user
 3. Manipulating the output
-* The <IMPORTANT> tag failed to manipulate the client due to Claude's defenses; removing the tag also failed to manipulate the client.
 
 
 
