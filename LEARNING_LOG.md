@@ -54,6 +54,3 @@
 
 * The AI Client uses the docstring description of the tool to determine when and how to use it. Attackers use tags such as <IMPORTANT>, <CRITICAL>, <URGENT>, etc. to draw focus. My testing with the used client shows that the tags made no difference.
 * The defenses against prompt injection within a malicious server rely mostly on the client and the user.
-
-&#x20;
-
