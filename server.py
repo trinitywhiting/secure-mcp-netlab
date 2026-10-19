@@ -1,8 +1,16 @@
 import socket #for dns_lookup
 import subprocess #for ping_host_unsafe
 from mcp.server import MCPServer
+from datetime import datetime
 
 mcp = MCPServer("NetLab")
+
+
+def audit_log(tool_name: str, user_input: str, result: str) -> None:
+    timestamp = datetime.now().isoformat()
+    line = f"{timestamp} | tool={tool_name} | input={user_input!r} | result={result}\n"
+    with open("audit.log", "a", encoding="utf-8") as f: #utf-8 for consistency / universality
+        f.write(line)
 
 @mcp.tool()
 def dns_lookup(hostname: str) -> str:
@@ -24,14 +32,20 @@ def ping_host(host:str) -> str: #python runs the ping program directly; no shell
     """Ping a host to check if it is reachable"""
     #allowlist
     if not host or not all(c.isalnum() or c in ".-" for c in host): #if the host is empty or if any char is not a letter, digit, dot, or hyphen, then reject it 
-        return f"Rejected: '{host}' is not a valid hostname."
+        result = f"Rejected: '{host}' is not a valid hostname."
+        audit_log("ping_host", host, result)
+        return result
     if host not in allowed_hosts:
-        return f"Rejected: '{host}' is not on the allowlist of permitted targets."
-    result = subprocess.run(
+        result = f"Rejected: '{host}' is not on the allowlist of permitted targets."
+        audit_log("ping_host", host, result)
+        return result
+    output = subprocess.run(
         ["ping", "-n", "1", host], #list method prevents injection
         capture_output=True, text=True
     )
-    return result.stdout
+    audit_log("ping_host", host, "pinged successfully")
+    return output.stdout
+
 
 if __name__ == "__main__":
     mcp.run()

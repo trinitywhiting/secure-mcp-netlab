@@ -1,18 +1,18 @@
-\# Learning Log: Secure MCP Network Lab
+# Learning Log: Secure MCP Network Lab
 
 
 
-\## 2026-10-09
+## 2026-10-09
 
 
 
-\*\*Goal:\*\*
+**Goal:**
 
 * Understand how AI clients accessing MCP servers can be vulnerable to command injection and prompt injection.
 
 
 
-\*\*What I did:\*\*
+**What I did:**
 
 * Command injection: Created an MCP server (netlab) and used the Claude Desktop App as the client for connection. The server included networking ping and DNS tools. The client was used in the Claude Code tab, with permissions for tools set to "needs approval" and "auto" mode within the chat. Local MCP server logs were viewed to show successful initialization of the server and tool access, and the DNS tool was tested directly in the client. Both unsafe and safe versions of the ping tool were created to conduct isolated tests of command injection.
 
@@ -24,7 +24,7 @@
 
 
 
-\*\*What I learned - Command Injection:\*\*
+*What I learned - Command Injection:**
 
 * A separate environment is necessary to remain organized and prevent projects from potentially breaking due to relying on specific dependencies.
 
@@ -50,7 +50,7 @@
 
 
 
-\*\*What I learned - Prompt Injection:\*\*
+**What I learned - Prompt Injection:**
 
 * The AI Client uses the docstring description of the tool to determine when and how to use it. Attackers use tags such as <IMPORTANT>, <CRITICAL>, <URGENT>, etc. to draw focus. My testing with the used client shows that the tags made no difference.
 * The defenses against prompt injection within a malicious server rely mostly on the client and the user.
